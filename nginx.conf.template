@@ -1,0 +1,19 @@
+server {
+    # Listen on the port specified by Cloud Run via the PORT environment variable
+    listen ${PORT};
+    server_name localhost;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html index.htm app.html;
+        
+        # If a file isn't found, fallback to index.html (useful for JS routers, though this is a static app)
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Optional: Error pages
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /usr/share/nginx/html;
+    }
+}

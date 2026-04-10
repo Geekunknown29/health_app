@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SAARTHI Health App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/data.js"></script>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- Top Bar -->
+    <header class="top-bar">
+        <div class="logo">SAARTHI</div>
+        <div style="display:flex; gap: 16px;">
+            <i class="fas fa-bell" style="font-size: 20px; color: var(--text-secondary); cursor: pointer;"></i>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <!-- FEED TAB -->
+        <section id="tab-feed" class="tab-view active">
+            <div style="margin-bottom: 20px; display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
+                <span class="badge badge-doctor" style="padding: 6px 12px; font-size: 14px; white-space: nowrap; cursor: pointer;">🩺 Doctors</span>
+                <span class="badge badge-vendor" style="padding: 6px 12px; font-size: 14px; white-space: nowrap; cursor: pointer;">🏪 Vendors</span>
+                <span class="badge badge-user" style="padding: 6px 12px; font-size: 14px; white-space: nowrap; cursor: pointer;">💡 Tips</span>
+            </div>
+            
+            <div id="feed-container">
+                <!-- Posts injected via JS -->
+            </div>
+        </section>
+
+        <!-- SAARTHI Chatbot TAB -->
+        <section id="tab-saarthi" class="tab-view">
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="chat-msg msg-ai">
+                        Hello! I am SAARTHI, your AI health assistant. 🤖<br><br>
+                        Tell me how you're feeling, or describe your symptoms.
+                    </div>
+                </div>
+                
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" class="chat-input" placeholder="E.g. I have a stomach ache and fever..." onkeypress="handleChatPress(event)">
+                    <button class="chat-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROFILE TAB -->
+        <section id="tab-profile" class="tab-view">
+            <div class="profile-header glass-panel">
+                <img src="https://ui-avatars.com/api/?name=Guest+User&background=10b981&color=fff" id="profile-avatar" class="profile-avatar">
+                <h2 class="profile-name" id="profile-name">Guest User</h2>
+                <div id="profile-badge-container">
+                    <span class="badge badge-user">Patient</span>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-val">3</div>
+                        <div class="stat-label">Posts</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-val">12</div>
+                        <div class="stat-label">Saved</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-outline" style="margin-top: 20px; width: 100%;" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin: 24px 0 16px 0; border-bottom: 2px solid var(--border-color); padding-bottom: 4px;">
+                <h3 style="flex:1; text-align:center; color:var(--text-primary); cursor:pointer; font-size:16px;">My Posts</h3>
+            </div>
+            <div id="profile-my-posts">
+                <!-- User's own posts -->
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin: 24px 0 16px 0; border-bottom: 2px solid var(--border-color); padding-bottom: 4px;">
+                <h3 style="flex:1; text-align:center; color:var(--accent); cursor:pointer; font-size:16px;"><i class="fas fa-bookmark"></i> Saved Posts</h3>
+            </div>
+            <div id="profile-saved-posts">
+                <!-- User's saved posts -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FAB for posting -->
+    <button class="fab" id="add-post-btn" onclick="openCreatePost()">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('feed', this)">
+            <i class="fas fa-home"></i>
+            <span>Feed</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('saarthi', this)">
+            <i class="fas fa-robot"></i>
+            <span>SAARTHI</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('profile', this)">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </button>
+    </nav>
+</div>
+
+    <!-- Toast & Modal Systems -->
+    <div id="toast-container"></div>
+    
+    <div id="comments-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel" style="z-index:1000; border:1px solid var(--border-color);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3 style="color:var(--text-primary); font-family:'Outfit'">Comments</h3>
+                <i class="fas fa-times" style="cursor:pointer; color:var(--text-secondary);" onclick="closeComments()"></i>
+            </div>
+            <div id="comments-list" style="max-height: 250px; overflow-y:auto; margin-bottom:16px;">
+                <div style="text-align:center; padding: 20px 0;">
+                    <i class="fas fa-comments" style="font-size:32px; color:var(--text-secondary); margin-bottom:10px; opacity:0.5;"></i>
+                    <p style="color:var(--text-secondary); font-size:14px;">No comments yet. Be the first!</p>
+                </div>
+            </div>
+            <div class="chat-input-area" style="border:none; padding-top:0;">
+                <input type="text" id="comment-input" class="chat-input" placeholder="Add a comment..." style="padding:8px 16px; font-size:14px;" onkeypress="if(event.key==='Enter') addComment()">
+                <button class="chat-send" style="width:40px; height:40px;" onclick="addComment()"><i class="fas fa-paper-plane" style="font-size:14px;"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div id="create-post-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel" style="z-index:1000; border:1px solid var(--border-color);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3 style="color:var(--text-primary); font-family:'Outfit'">Create Post</h3>
+                <i class="fas fa-times" style="cursor:pointer; color:var(--text-secondary);" onclick="closeCreatePost()"></i>
+            </div>
+            <textarea id="new-post-content" class="input-control" rows="4" placeholder="Share a health tip, insight, or announcement..." style="resize:none; margin-bottom:16px; background:rgba(0,0,0,0.03);"></textarea>
+            <button class="btn btn-primary" onclick="submitPost()" style="width:100%; border-radius:8px;">Post</button>
+        </div>
+    </div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

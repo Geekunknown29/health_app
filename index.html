@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SAARTHI Health - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="auth-wrapper">
+    <div class="auth-card glass-panel">
+        <div class="logo" style="font-size: 32px; margin-bottom: 8px;">SAARTHI</div>
+        <p style="color: var(--text-secondary); margin-bottom: 32px;">Your AI Health Companion & Community</p>
+
+        <div class="auth-tabs">
+            <div class="auth-tab active" onclick="switchAuthTab('user')">User</div>
+            <div class="auth-tab" onclick="switchAuthTab('doctor')">Doctor</div>
+        </div>
+
+        <!-- User Login Form -->
+        <div id="userLoginForm" class="auth-form active">
+            <div class="input-group">
+                <label>Mobile Number</label>
+                <input type="tel" class="input-control" placeholder="+91 98765 43210" id="userMobile">
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 16px;" onclick="handleLogin('user')">
+                <i class="fas fa-comment-sms"></i> Send OTP
+            </button>
+            
+            <div style="display:flex; align-items:center; margin: 16px 0;">
+                <hr style="flex:1; border-color:var(--border-color);"><span style="padding:0 10px;color:var(--text-secondary);font-size:12px;">OR</span><hr style="flex:1; border-color:var(--border-color);">
+            </div>
+            
+            <button class="btn btn-outline" style="width: 100%;" onclick="handleLogin('user')">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+        </div>
+
+        <!-- Doctor Login Form -->
+        <div id="doctorLoginForm" class="auth-form hidden">
+            <div class="input-group">
+                <label>14-Digit ABHA ID (Mandatory for Doctors)</label>
+                <input type="text" class="input-control" placeholder="XX-XXXX-XXXX-XXXX" id="docAbha">
+            </div>
+            <div class="input-group">
+                <label>Mobile Number / Email</label>
+                <input type="text" class="input-control" placeholder="Contact">
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 16px;" onclick="handleLogin('doctor')">
+                <i class="fas fa-stethoscope"></i> Verify & Login
+            </button>
+        </div>
+        
+        <p id="authMessage" style="color: var(--accent); margin-top: 16px; font-size: 14px; display:none;"></p>
+    </div>
+</div>
+
+<script src="js/auth.js"></script>
+</body>
+</html>
